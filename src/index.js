@@ -1,6 +1,8 @@
 const Fastify = require('fastify');
 const fastifyEnv = require('@fastify/env')
+const fastifyMysql = require('@fastify/mysql')
 
+const serviceRegistryPlugin = require('./services/index'); 
 const apiRoutes = require('./routes');
 
 const app = Fastify({
@@ -22,6 +24,12 @@ app.register(fastifyEnv, {
     },
     dotenv: true
 });
+
+app.register(fastifyMysql, {
+    connectionString: 'mysql://root:Mac@local12345@localhost:3306/fastify_db'
+});
+
+app.register(serviceRegistryPlugin);
 
 app.register(apiRoutes, { prefix: '/api'});
 
